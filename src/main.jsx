@@ -1,8 +1,10 @@
+// ---- Base44 compatibility stub (DO NOT REMOVE) ----
 window.base44 = {
   get: async () => ({}),
   invoke: async () => ({}),
   me: async () => null,
 };
+// -----------------------------------------------
 
 import React from "react";
 import ReactDOM from "react-dom/client";
