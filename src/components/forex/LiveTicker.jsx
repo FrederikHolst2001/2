@@ -16,25 +16,11 @@ const initialTickerData = [
 ];
 
 export default function LiveTicker() {
-  const [tickerData, setTickerData] = useState(initialTickerData);
+  const [tickerData] = useState(initialTickerData);
 
   useEffect(() => {
-    const fetchLiveData = async () => {
-      try {
-        const { data } = await base44.functions.invoke('fetchForexData', {});
-        
-        if (data.pairs && data.pairs.length > 0) {
-          setTickerData(data.pairs);
-        }
-      } catch (error) {
-        console.error('Failed to fetch live forex data:', error);
-      }
-    };
-
-    fetchLiveData();
-    const interval = setInterval(fetchLiveData, 3600000); // Update every hour
-
-    return () => clearInterval(interval);
+    // 🚫 Live forex fetching DISABLED until a real backend exists
+    return;
   }, []);
 
   const duplicatedData = [...tickerData, ...tickerData];
@@ -55,17 +41,32 @@ export default function LiveTicker() {
             key={`${item.pair}-${index}`}
             className="flex items-center gap-3 whitespace-nowrap"
           >
-            <span className="text-slate-400 font-medium text-sm">{item.pair}</span>
-            <span className="text-white font-mono font-semibold">{item.price.toFixed(4)}</span>
-            <div className={`flex items-center gap-1 text-xs font-medium ${
-              item.direction === 'up' ? 'text-emerald-400' :
-              item.direction === 'down' ? 'text-rose-400' : 'text-slate-500'
-            }`}>
+            <span className="text-slate-400 font-medium text-sm">
+              {item.pair}
+            </span>
+
+            <span className="text-white font-mono font-semibold">
+              {item.price.toFixed(4)}
+            </span>
+
+            <div
+              className={`flex items-center gap-1 text-xs font-medium ${
+                item.direction === 'up'
+                  ? 'text-emerald-400'
+                  : item.direction === 'down'
+                  ? 'text-rose-400'
+                  : 'text-slate-500'
+              }`}
+            >
               {item.direction === 'up' && <TrendingUp className="w-3 h-3" />}
               {item.direction === 'down' && <TrendingDown className="w-3 h-3" />}
               {item.direction === 'neutral' && <Minus className="w-3 h-3" />}
-              <span>{item.change >= 0 ? '+' : ''}{item.change.toFixed(2)}%</span>
+              <span>
+                {item.change >= 0 ? '+' : ''}
+                {item.change.toFixed(2)}%
+              </span>
             </div>
+
             <div className="w-px h-4 bg-slate-700 ml-4" />
           </div>
         ))}
